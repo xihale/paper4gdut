@@ -125,24 +125,7 @@
 // =================== 模板函数 ===================
 
 // 本科毕业设计（论文）
-#let thesis(
-  title: "",
-  title_en: "",
-  author: "",
-  student_id: "",
-  advisor: "",
-  major: "",
-  school: "",
-  class_info: "",
-  date: datetime.today(),
-  abstract_cn: [],
-  keywords_cn: (),
-  abstract_en: [],
-  keywords_en: (),
-  header_text: none,
-  show_cover: true,
-  doc_body
-) = {
+#let thesis(metadata, show_cover: true, doc_body) = {
   common-settings[
     set page(numbering: none)
 
@@ -150,15 +133,15 @@
     if show_cover {
       thesis-cover(
         fonts: fonts,
-        title: title,
-        title_en: title_en,
-        author: author,
-        student_id: student_id,
-        advisor: advisor,
-        major: major,
-        school: school,
-        class_info: class_info,
-        date: date,
+        title: metadata.title,
+        title_en: metadata.title_en,
+        author: metadata.author,
+        student_id: metadata.student_id,
+        advisor: metadata.advisor,
+        major: metadata.major,
+        school: metadata.school,
+        class_info: metadata.class_info,
+        date: metadata.date,
       )
     }
 
@@ -168,25 +151,25 @@
         #text(font: heiti, size: 15.75pt, weight: 400)[摘  要]
       ]
       #v(1em)
-      #abstract_cn
+      #metadata.abstract_cn
       #v(1em)
       #text(font: heiti, size: 14pt, weight: 400)[关键词：]
-      #keywords_cn.join("；")
+      #metadata.keywords_cn.join("；")
     ]
 
     pagebreak()
 
     // 英文摘要
-    if abstract_en != [] or keywords_en != () {
+    if metadata.abstract_en != [] or metadata.keywords_en != () {
       [
         #align(center)[
           #text(font: heiti, size: 15.75pt, weight: 400)[Abstract]
         ]
         #v(1em)
-        #abstract_en
+        #metadata.abstract_en
         #v(1em)
         #text(font: heiti, size: 14pt, weight: 400)[Keywords: ]
-        #keywords_en.join("; ")
+        #metadata.keywords_en.join("; ")
       ]
       pagebreak()
     }
@@ -203,45 +186,33 @@
     pagebreak()
 
     // 正文
-    setup-header-footer(title: title, header_text: header_text)
+    setup-header-footer(title: metadata.title, header_text: metadata.header_text)
 
     doc_body
   ]
 }
 
 // 程序设计课程设计报告
-#let course-report(
-  title: "",
-  author: "",
-  student_id: "",
-  advisor: "",
-  major: "",
-  school: "",
-  class_info: "",
-  grade: "",
-  date: datetime.today(),
-  header_text: none,
-  body
-) = {
+#let course-report(metadata, body) = {
   common-settings[
     set page(numbering: none)
 
     // 封面
     course-report-cover(
       fonts: fonts,
-      title: title,
-      author: author,
-      student_id: student_id,
-      advisor: advisor,
-      major: major,
-      school: school,
-      class_info: class_info,
-      grade: grade,
-      date: date,
+      title: metadata.title,
+      author: metadata.author,
+      student_id: metadata.student_id,
+      advisor: metadata.advisor,
+      major: metadata.major,
+      school: metadata.school,
+      class_info: metadata.class_info,
+      grade: metadata.grade,
+      date: metadata.date,
     )
 
     // 正文
-    setup-header-footer(title: title, header_text: header_text)
+    setup-header-footer(title: metadata.title, header_text: metadata.header_text)
 
     body
   ]
